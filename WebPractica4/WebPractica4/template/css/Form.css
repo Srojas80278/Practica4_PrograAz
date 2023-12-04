@@ -1,0 +1,11 @@
+body {
+    background: transparent; /* Establece el fondo como transparente */
+    margin: 0; /* Elimina el margen predeterminado del body */
+}
+
+
+#seccion {
+    padding-top: 8%;
+    padding-bottom: 10%;
+}
+
