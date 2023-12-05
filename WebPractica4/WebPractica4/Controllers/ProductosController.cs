@@ -38,7 +38,7 @@ namespace WebPractica4.Controllers
             };
 
             var datos = ProductoModelo.RegistrarAbono(entidad);
-            return View(datos);
+            return RedirectToAction("ConsultarProductos");
         }
 
     }

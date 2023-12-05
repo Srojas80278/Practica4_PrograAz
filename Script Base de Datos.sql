@@ -140,7 +140,7 @@ BEGIN
 END
 GO
 EXEC SP_ConsultarProducto @Id_Compra = 1;
-
+USE PracticaS12;
 --
 SELECT * FROM Principal;
 SELECT * FROM ABONOS;

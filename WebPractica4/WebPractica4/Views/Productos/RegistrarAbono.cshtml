@@ -53,7 +53,7 @@
 
                                     <!-- Botón de Submit-->
                                     <div class="d-flex justify-content-center">
-                                        <button onclick="prepararEnvio();" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                                        <button onclick="return validarInformacion();" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
                                             Abonar
                                         </button>
                                     </div>
@@ -89,33 +89,34 @@
                                     }
 
                                     function prepararEnvio() {
-                                        // Recolecta la información necesaria
-                                        var idCompra = $('#idCompraSeleccionado').val();
-                                        var montoAbono = $('#form3Example3cg').val();
+                                        console.log("PREPARAR ENVIO")
+                                            // Recolecta la información necesaria
+                                            var idCompra = $('#idCompraSeleccionado').val();
+                                            var montoAbono = $('#form3Example3cg').val();
 
-                                        // Añade la información al formulario como campos adicionales si es necesario
-                                        $('<input>').attr({ type: 'hidden', id: 'id_compra', name: 'id_compra', value: idCompra }).appendTo('#citaForm');
-                                        $('<input>').attr({ type: 'hidden', id: 'dineroAbonar', name: 'dineroAbonar', value: montoAbono }).appendTo('#citaForm');
+                                            // Añade la información al formulario como campos adicionales si es necesario
+                                            $('<input>').attr({ type: 'hidden', id: 'id_compra', name: 'id_compra', value: idCompra }).appendTo('#citaForm');
+                                            $('<input>').attr({ type: 'hidden', id: 'dineroAbonar', name: 'dineroAbonar', value: montoAbono }).appendTo('#citaForm');
 
-                                        // Devuelve true para permitir el envío del formulario
-                                        return true;
+                                            // Devuelve true para permitir el envío del formulario
+                                             document.getElementById('citaForm').submit();
+
+                                        
+
                                     }
 
-
-                                    function validarAbono() {
+                                    function validarInformacion() {
+                                        console.log("VALIDAR INFO")
                                         var saldoPendiente = parseFloat(document.getElementById("form3Example1cg").value);
                                         var abono = parseFloat(document.getElementById("form3Example3cg").value);
 
-                                        if (isNaN(abono) || abono < 0) {
-                                            alert("Por favor, ingrese un monto de abono válido.");
+                                        if (isNaN(abono) || abono < 0 || abono > saldoPendiente || abono === 0) {
+                                            alert("El abono no puede ser cero ni mayor al saldo pendiente")
                                             return false;
+                                        } else {
+                                            prepararEnvio();
                                         }
 
-                                        if (abono > saldoPendiente) {
-                                            alert("El monto de abono no puede ser mayor que el saldo pendiente.");
-                                            window.location.reload();
-                                            return false;
-                                        }
                                     }
                                 </script>
                             </div>
