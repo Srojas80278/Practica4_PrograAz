@@ -18,8 +18,6 @@ namespace WebPractica4.Controllers
             return View(datos);
         }
 
-
-
         [HttpGet]
         public ActionResult RegistrarAbono()
         {

@@ -18,7 +18,8 @@
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-4">
                                 <h2 class="text-uppercase text-center mb-4">Registrar un Abono</h2>
-                                <form>
+                                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "citaForm" }))
+                                {
                                     <table class="table table-bordered table-striped mx-auto">
                                         <tbody>
                                             @foreach (var item in Model)
@@ -31,7 +32,7 @@
                                                         @Html.DisplayFor(modelItem => item.Descripcion)
                                                     </td>
                                                     <td>
-                                                        <button type="button" onclick="ConsultarSaldo(this)" data-saldo="@item.Saldo" class="btn btn-secondary">Consultar Saldo</button>
+                                                        <button type="button" onclick="ConsultarSaldo(this);" data-saldo="@item.Saldo" class="btn btn-secondary">Consultar Saldo</button>
                                                     </td>
                                                 </tr>
                                             }
@@ -40,29 +41,46 @@
 
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="form3Example1cg">Saldo Pendiente:</label>
-                                        <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
+                                        <input type="text" id="form3Example1cg" class="form-control form-control-lg" readonly />
                                     </div>
-
-                                    <script>
-                                        function ConsultarSaldo(button) {
-                                            var saldo = button.getAttribute("data-saldo");
-
-                                            document.getElementById("form3Example1cg").value = saldo;
-                                        }
-                                    </script>
 
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="form3Example3cg">Dinero a Abonar:</label>
-                                        <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                                        <input type="number" id="form3Example3cg" class="form-control form-control-lg" />
                                     </div>
 
                                     <!-- Botón de Submit-->
                                     <div class="d-flex justify-content-center">
-                                        <button type="button" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
-                                            Register
+                                        <button onclick="return validarAbono();" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                                            Abonar
                                         </button>
                                     </div>
-                                </form>
+
+
+                                }
+
+                                <script>
+                                    function ConsultarSaldo(button) {
+                                        var saldo = button.getAttribute("data-saldo");
+                                        document.getElementById("form3Example1cg").value = saldo;
+                                    }
+
+                                    function validarAbono() {
+                                        var saldoPendiente = parseFloat(document.getElementById("form3Example1cg").value);
+                                        var abono = parseFloat(document.getElementById("form3Example3cg").value);
+
+                                        if (isNaN(abono) || abono < 0) {
+                                            alert("Por favor, ingrese un monto de abono válido.");
+                                            return false;
+                                        }
+
+                                        if (abono > saldoPendiente) {
+                                            alert("El monto de abono no puede ser mayor que el saldo pendiente.");
+                                            window.location.reload();
+                                            return false;
+                                        }
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
