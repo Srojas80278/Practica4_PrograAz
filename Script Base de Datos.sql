@@ -75,3 +75,72 @@ BEGIN
 END
 GO
 EXEC SP_ProductosPendientes;
+GO
+
+--
+CREATE PROCEDURE RegistrarAbonoSP
+    @IdCompra bigint,
+    @Monto decimal(18, 2)
+AS
+BEGIN
+    -- Verificar si el monto del abono es menor o igual al saldo
+    IF @Monto <= (SELECT Saldo FROM Principal WHERE Id_Compra = @IdCompra)
+    BEGIN
+        -- Insertar el abono en la tabla Abonos
+        INSERT INTO Abonos (Id_Compra, Monto, Fecha)
+        VALUES (@IdCompra, @Monto, GETDATE())
+
+        -- Actualizar el saldo en la tabla Principal restando el monto del abono
+        UPDATE Principal
+        SET Saldo = Saldo - @Monto
+        WHERE Id_Compra = @IdCompra
+
+        PRINT 'Abono registrado exitosamente.'
+    END
+    ELSE
+    BEGIN
+        PRINT 'Error: El monto del abono es mayor al saldo de la compra.'
+    END
+END
+EXEC RegistrarAbonoSP @IdCompra = 1, @Monto = 1;
+GO
+--
+CREATE PROCEDURE SP_ORDENADO
+AS
+BEGIN
+    SELECT [Id_Compra]
+          ,[Precio]
+          ,[Saldo]
+          ,[Descripcion]
+          ,[Estado]
+    FROM [dbo].[Principal]
+    ORDER BY
+        CASE WHEN [Estado] = 'pendiente' THEN 0 ELSE 1 END,  --Primero ordena por estado
+        [Estado],
+        [Id_Compra]; -- Luego ordena por Id
+END
+GO
+EXEC SP_ORDENADO;
+GO
+--
+--
+CREATE PROCEDURE SP_ConsultarProducto
+    @Id_Compra INT
+AS
+BEGIN
+    SELECT [Id_Compra]
+          ,[Precio]
+          ,[Saldo]
+          ,[Descripcion]
+          ,[Estado]
+    FROM [dbo].[Principal]
+    WHERE [Estado] = 'pendiente'
+      AND [Id_Compra] = @Id_Compra
+    ORDER BY [Id_Compra];
+END
+GO
+EXEC SP_ConsultarProducto @Id_Compra = 1;
+
+--
+SELECT * FROM Principal;
+SELECT * FROM ABONOS;

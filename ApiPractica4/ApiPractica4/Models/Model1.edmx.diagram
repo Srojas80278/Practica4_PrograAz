@@ -4,9 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b2626ece5405475893a16715edca083e" Name="Diagram1">
-        <EntityTypeShape EntityType="PracticaS12Model.Abonos" Width="1.5" PointX="9" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PracticaS12Model.Principal" Width="1.5" PointX="6.75" PointY="1.75" IsExpanded="true" />
+      <Diagram DiagramId="e7959f6b520044c6bddd1f2d01227ae1" Name="Diagram1">
+        <EntityTypeShape EntityType="PracticaS12Model.Abonos" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PracticaS12Model.Principal" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="PracticaS12Model.FK_Abonos_Principal" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

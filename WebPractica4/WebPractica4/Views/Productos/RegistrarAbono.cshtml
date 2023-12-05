@@ -18,7 +18,7 @@
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-4">
                                 <h2 class="text-uppercase text-center mb-4">Registrar un Abono</h2>
-                                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "citaForm" }))
+                                @using (Html.BeginForm("RegistrarAbono", "Productos", FormMethod.Post, new { @class = "form-horizontal", id = "citaForm" }))
                                 {
                                     <table class="table table-bordered table-striped mx-auto">
                                         <tbody>
@@ -32,13 +32,12 @@
                                                         @Html.DisplayFor(modelItem => item.Descripcion)
                                                     </td>
                                                     <td>
-                                                        <button type="button" onclick="ConsultarSaldo(this);" data-saldo="@item.Saldo" class="btn btn-secondary">Consultar Saldo</button>
+                                                        <button type="button" onclick="ConsultarSaldo('@item.Id_Compra', '@item.Saldo');" class="btn btn-secondary">Consultar Saldo</button>
                                                     </td>
                                                 </tr>
                                             }
                                         </tbody>
                                     </table>
-
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="form3Example1cg">Saldo Pendiente:</label>
                                         <input type="text" id="form3Example1cg" class="form-control form-control-lg" readonly />
@@ -46,12 +45,15 @@
 
                                     <div class="form-outline mb-3">
                                         <label class="form-label" for="form3Example3cg">Dinero a Abonar:</label>
-                                        <input type="number" id="form3Example3cg" class="form-control form-control-lg" />
+                                        <input type="number" id="form3Example3cg" name="montoAbono" class="form-control form-control-lg" />
                                     </div>
+
+                                    <!-- Campo oculto para almacenar el Id_Compra seleccionado -->
+                                    <input type="hidden" id="idCompraSeleccionado" name="idCompraSeleccionado" />
 
                                     <!-- Botón de Submit-->
                                     <div class="d-flex justify-content-center">
-                                        <button onclick="return validarAbono();" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                                        <button onclick="prepararEnvio();" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
                                             Abonar
                                         </button>
                                     </div>
@@ -59,11 +61,46 @@
 
                                 }
 
+
+                                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                                 <script>
-                                    function ConsultarSaldo(button) {
-                                        var saldo = button.getAttribute("data-saldo");
-                                        document.getElementById("form3Example1cg").value = saldo;
+                                    function ConsultarSaldo(idCompra, saldo) {
+                                        // Almacena el Id_Compra seleccionado en el campo oculto
+                                        $('#idCompraSeleccionado').val(idCompra);
+
+                                        // Construye la URL completa con el dominio y el puerto de tu API
+                                        var url = 'https://localhost:44336/ConsultarProducto?idCompra=' + idCompra;
+
+                                        // Realiza la solicitud AJAX a la API
+                                        $.ajax({
+                                            url: url,
+                                            type: 'GET',
+                                            success: function (data) {
+                                                // Formatea el valor del saldo a un decimal con cinco decimales
+                                                var saldoFormateado = parseFloat(data.Saldo).toFixed(5);
+
+                                                // Actualiza el valor del Saldo Pendiente
+                                                $('#form3Example1cg').val(saldoFormateado);
+                                            },
+                                            error: function (error) {
+                                                console.error('Error al consultar el saldo:', error);
+                                            }
+                                        });
                                     }
+
+                                    function prepararEnvio() {
+                                        // Recolecta la información necesaria
+                                        var idCompra = $('#idCompraSeleccionado').val();
+                                        var montoAbono = $('#form3Example3cg').val();
+
+                                        // Añade la información al formulario como campos adicionales si es necesario
+                                        $('<input>').attr({ type: 'hidden', id: 'id_compra', name: 'id_compra', value: idCompra }).appendTo('#citaForm');
+                                        $('<input>').attr({ type: 'hidden', id: 'dineroAbonar', name: 'dineroAbonar', value: montoAbono }).appendTo('#citaForm');
+
+                                        // Devuelve true para permitir el envío del formulario
+                                        return true;
+                                    }
+
 
                                     function validarAbono() {
                                         var saldoPendiente = parseFloat(document.getElementById("form3Example1cg").value);

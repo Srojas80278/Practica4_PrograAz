@@ -40,11 +40,17 @@
       <End Role="Principal" EntitySet="Principal" />
       <End Role="Abonos" EntitySet="Abonos" />
     </AssociationSet>
-    <FunctionImport Name="SP_ConsultarProductos" ReturnType="Collection(PracticaS12Model.SP_ConsultarProductos_Result)" />
+    <FunctionImport Name="RegistrarAbonoSP">
+      <Parameter Name="IdCompra" Mode="In" Type="Int64" />
+      <Parameter Name="Monto" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="SP_ConsultarProducto" ReturnType="Collection(PracticaS12Model.SP_ConsultarProducto_Result)">
+      <Parameter Name="Id_Compra" Mode="In" Type="Int32" />
+    </FunctionImport>
     <FunctionImport Name="SP_ORDENADO" ReturnType="Collection(PracticaS12Model.SP_ORDENADO_Result)" />
     <FunctionImport Name="SP_ProductosPendientes" ReturnType="Collection(PracticaS12Model.SP_ProductosPendientes_Result)" />
   </EntityContainer>
-  <ComplexType Name="SP_ConsultarProductos_Result">
+  <ComplexType Name="SP_ConsultarProducto_Result">
     <Property Type="Int64" Name="Id_Compra" Nullable="false" />
     <Property Type="Decimal" Name="Precio" Nullable="false" Precision="18" Scale="5" />
     <Property Type="Decimal" Name="Saldo" Nullable="false" Precision="18" Scale="5" />

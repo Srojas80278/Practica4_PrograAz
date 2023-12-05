@@ -1,4 +1,5 @@
-﻿using ApiPractica4.Models;
+﻿using ApiPractica4.entities;
+using ApiPractica4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,30 @@ namespace ApiPractica4.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("ConsultarProducto")]
+        public SP_ConsultarProducto_Result ConsultarProducto(int idCompra)
+        {
+            using (var contexto = new PracticaS12Entities())
+            {
+                // Llama al procedimiento almacenado con el parámetro Id_Compra
+                var resultado = contexto.SP_ConsultarProducto(idCompra).FirstOrDefault();
 
+                return resultado;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("RegistrarAbono")]
+        public string RegistrarAbonoSP(AbonosEntidad entidad)
+        {
+            using (var context = new PracticaS12Entities())
+            {
+                context.RegistrarAbonoSP(entidad.Id_Compra, entidad.Monto);
+                return "OK";
+            }
+        }
 
     }
 }

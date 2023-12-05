@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PracticaS12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="PracticaS12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Abonos">
           <Key>
             <PropertyRef Name="Id_Abono" />
@@ -36,6 +36,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="RegistrarAbonoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCompra" Type="bigint" Mode="In" />
+          <Parameter Name="Monto" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="SP_ConsultarProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id_Compra" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_ORDENADO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_ProductosPendientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="PracticaS12ModelStoreContainer">
@@ -46,7 +53,8 @@
             <End Role="Abonos" EntitySet="Abonos" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PracticaS12Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -90,11 +98,17 @@
             <End Role="Principal" EntitySet="Principal" />
             <End Role="Abonos" EntitySet="Abonos" />
           </AssociationSet>
-          <FunctionImport Name="SP_ConsultarProductos" ReturnType="Collection(PracticaS12Model.SP_ConsultarProductos_Result)" />
+          <FunctionImport Name="RegistrarAbonoSP">
+            <Parameter Name="IdCompra" Mode="In" Type="Int64" />
+            <Parameter Name="Monto" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ConsultarProducto" ReturnType="Collection(PracticaS12Model.SP_ConsultarProducto_Result)">
+            <Parameter Name="Id_Compra" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="SP_ORDENADO" ReturnType="Collection(PracticaS12Model.SP_ORDENADO_Result)" />
           <FunctionImport Name="SP_ProductosPendientes" ReturnType="Collection(PracticaS12Model.SP_ProductosPendientes_Result)" />
         </EntityContainer>
-        <ComplexType Name="SP_ConsultarProductos_Result">
+        <ComplexType Name="SP_ConsultarProducto_Result">
           <Property Type="Int64" Name="Id_Compra" Nullable="false" />
           <Property Type="Decimal" Name="Precio" Nullable="false" Precision="18" Scale="5" />
           <Property Type="Decimal" Name="Saldo" Nullable="false" Precision="18" Scale="5" />
@@ -142,6 +156,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RegistrarAbonoSP" FunctionName="PracticaS12Model.Store.RegistrarAbonoSP" />
+          <FunctionImportMapping FunctionImportName="SP_ConsultarProducto" FunctionName="PracticaS12Model.Store.SP_ConsultarProducto">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PracticaS12Model.SP_ConsultarProducto_Result">
+                <ScalarProperty Name="Id_Compra" ColumnName="Id_Compra" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_ORDENADO" FunctionName="PracticaS12Model.Store.SP_ORDENADO">
             <ResultMapping>
               <ComplexTypeMapping TypeName="PracticaS12Model.SP_ORDENADO_Result">
@@ -181,7 +207,7 @@
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

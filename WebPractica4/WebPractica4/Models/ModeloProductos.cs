@@ -32,7 +32,15 @@ namespace WebPractica4.Models
             }
         }
 
-
-
+        public string RegistrarAbono(AbonosEntidad entidad)
+        {
+            using (var client = new HttpClient())
+            {
+                var urlApi = rutaServidor + "RegistrarAbono";
+                var jsonData = JsonContent.Create(entidad);
+                var res = client.PostAsync(urlApi, jsonData).Result;
+                return res.Content.ReadFromJsonAsync<string>().Result;
+            }
+        }
     }
 }

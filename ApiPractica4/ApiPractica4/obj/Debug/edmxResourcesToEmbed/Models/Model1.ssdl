@@ -31,6 +31,13 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="RegistrarAbonoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="IdCompra" Type="bigint" Mode="In" />
+    <Parameter Name="Monto" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="SP_ConsultarProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id_Compra" Type="int" Mode="In" />
+  </Function>
   <Function Name="SP_ORDENADO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="SP_ProductosPendientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="PracticaS12ModelStoreContainer">
